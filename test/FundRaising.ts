@@ -3,9 +3,6 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 describe("FundRaising", function () {
-  // We define a fixture to reuse the same setup in every test.
-  // We use loadFixture to run this setup once, snapshot that state,
-  // and reset Hardhat Network to that snapshot in every test.
   async function deployOneWeekFundRaisingFixture() {
     const ONE_WEEK = 7 * 24 * 60 * 60;
 
@@ -100,7 +97,7 @@ describe("FundRaising", function () {
         deployOneWeekFundRaisingFixture
       );
 
-      const funding = fundRaising.fund("Ben", "Help those cuties!", {
+      fundRaising.fund("Ben", "Help those cuties!", {
         value: ethers.utils.parseEther("0"),
       });
 

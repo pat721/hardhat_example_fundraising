@@ -39,7 +39,10 @@ async function main() {
   const unlockDate = (await time.latest()) + 100;
 
   const FundRaising = await ethers.getContractFactory("FundRaising");
-  const fundRaising = await FundRaising.deploy(unlockDate, "Safe the turtles!");
+  const fundRaising = await FundRaising.deploy(
+    unlockDate,
+    "Lets safe the turtles!"
+  );
   await fundRaising.deployed();
   console.log("FundRaising deployed to ", fundRaising.address);
 
