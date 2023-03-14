@@ -6,7 +6,7 @@ describe("FundRaising", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
-  async function deployOneYearLockFixture() {
+  async function deployOneWeekFundRaisingFixture() {
     const ONE_WEEK = 7 * 24 * 60 * 60;
 
     const unlockDate = (await time.latest()) + ONE_WEEK;
@@ -32,7 +32,7 @@ describe("FundRaising", function () {
   describe("Deployment", function () {
     it("Should set the right unlockTime", async function () {
       const { fundRaising, unlockDate } = await loadFixture(
-        deployOneYearLockFixture
+        deployOneWeekFundRaisingFixture
       );
 
       expect(await fundRaising.unlockTime()).to.equal(unlockDate);
@@ -40,7 +40,7 @@ describe("FundRaising", function () {
 
     it("Should set the right owner", async function () {
       const { fundRaising, owner } = await loadFixture(
-        deployOneYearLockFixture
+        deployOneWeekFundRaisingFixture
       );
 
       expect(await fundRaising.owner()).to.equal(owner.address);
@@ -48,7 +48,7 @@ describe("FundRaising", function () {
 
     it("Should set the right message", async function () {
       const { fundRaising, fundPurpose } = await loadFixture(
-        deployOneYearLockFixture
+        deployOneWeekFundRaisingFixture
       );
 
       expect(await fundRaising.fundingPurpose()).to.equal(fundPurpose);
@@ -66,7 +66,7 @@ describe("FundRaising", function () {
   describe("Funding", function () {
     it("Should fund properly and add funder to fundMessages Array", async function () {
       const { fundRaising, funder } = await loadFixture(
-        deployOneYearLockFixture
+        deployOneWeekFundRaisingFixture
       );
 
       await fundRaising.connect(funder).fund("Ben", "Help those cuties!", {
@@ -78,7 +78,7 @@ describe("FundRaising", function () {
 
     it("Should fund and emit a new event", async function () {
       const { fundRaising, funder } = await loadFixture(
-        deployOneYearLockFixture
+        deployOneWeekFundRaisingFixture
       );
 
       const funding = fundRaising.fund("Ben", "Help those cuties!", {
@@ -96,7 +96,9 @@ describe("FundRaising", function () {
     });
 
     it("Should fail funding for not enough money", async function () {
-      const { fundRaising } = await loadFixture(deployOneYearLockFixture);
+      const { fundRaising } = await loadFixture(
+        deployOneWeekFundRaisingFixture
+      );
 
       const funding = fundRaising.fund("Ben", "Help those cuties!", {
         value: ethers.utils.parseEther("0"),
@@ -111,7 +113,9 @@ describe("FundRaising", function () {
   describe("Withdrawals", function () {
     describe("Validations", function () {
       it("Should revert with the right error if called too soon", async function () {
-        const { fundRaising } = await loadFixture(deployOneYearLockFixture);
+        const { fundRaising } = await loadFixture(
+          deployOneWeekFundRaisingFixture
+        );
 
         await expect(fundRaising.withdrawFunds()).to.be.revertedWith(
           "You can't withdraw yet"
@@ -120,7 +124,7 @@ describe("FundRaising", function () {
 
       it("Should revert with the right error if called from another account", async function () {
         const { fundRaising, unlockDate, funder } = await loadFixture(
-          deployOneYearLockFixture
+          deployOneWeekFundRaisingFixture
         );
 
         // We can increase the time in Hardhat Network
@@ -134,7 +138,7 @@ describe("FundRaising", function () {
 
       it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
         const { fundRaising, unlockDate } = await loadFixture(
-          deployOneYearLockFixture
+          deployOneWeekFundRaisingFixture
         );
 
         // Transactions are sent using the first signer by default
@@ -147,7 +151,7 @@ describe("FundRaising", function () {
     describe("Transfers", function () {
       it("Should transfer the funds to the owner", async function () {
         const { fundRaising, unlockDate, owner, funder } = await loadFixture(
-          deployOneYearLockFixture
+          deployOneWeekFundRaisingFixture
         );
 
         await fundRaising.connect(funder).fund("Ben", "Help those cuties!", {
