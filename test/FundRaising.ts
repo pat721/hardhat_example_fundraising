@@ -27,12 +27,12 @@ describe("FundRaising", function () {
   }
 
   describe("Deployment", function () {
-    it("Should set the right unlockTime", async function () {
+    it("Should set the right unlockDate", async function () {
       const { fundRaising, unlockDate } = await loadFixture(
         deployOneWeekFundRaisingFixture
       );
 
-      expect(await fundRaising.unlockTime()).to.equal(unlockDate);
+      expect(await fundRaising.unlockDate()).to.equal(unlockDate);
     });
 
     it("Should set the right owner", async function () {

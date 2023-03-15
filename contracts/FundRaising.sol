@@ -20,14 +20,14 @@ contract FundRaising {
 
     address payable public owner;
     string public fundingPurpose;
-    uint public unlockTime;
+    uint public unlockDate;
 
     constructor(uint256 _unlockDate, string memory _fundingPurpose) {
         require(
             _unlockDate > block.timestamp,
             "The date for unlocking should be in the future"
         );
-        unlockTime = _unlockDate;
+        unlockDate = _unlockDate;
         fundingPurpose = _fundingPurpose;
         owner = payable(msg.sender);
     }
@@ -46,7 +46,7 @@ contract FundRaising {
     }
 
     function withdrawFunds() public {
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
+        require(block.timestamp >= unlockDate, "You can't withdraw yet");
         require(msg.sender == owner, "You aren't the owner");
 
         owner.transfer(address(this).balance);
