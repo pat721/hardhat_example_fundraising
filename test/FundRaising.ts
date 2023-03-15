@@ -133,7 +133,7 @@ describe("FundRaising", function () {
         ).to.be.revertedWith("You aren't the owner");
       });
 
-      it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
+      it("Shouldn't fail if the unlockDate has arrived and the owner calls it", async function () {
         const { fundRaising, unlockDate } = await loadFixture(
           deployOneWeekFundRaisingFixture
         );
